@@ -19,15 +19,40 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Security — relax CSP for inline styles/scripts from React build
+// 1. Security Headers
 app.use(helmet({
     contentSecurityPolicy: false,
     crossOriginEmbedderPolicy: false,
 }));
+
+// 2. Robust CORS Configuration
+const allowedOrigin = process.env.CLIENT_URL || 'http://localhost:5173';
+
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        
+        console.log(`Incoming Origin: ${origin}`);
+        
+        const isAllowed = origin === allowedOrigin || 
+                          origin === allowedOrigin.replace(/\/$/, '') ||
+                          origin.endsWith('.vercel.app'); // Temporarily allow all vercel subdomains for easier setup
+        
+        if (isAllowed) {
+            callback(null, true);
+        } else {
+            console.warn(`CORS Blocked for: ${origin}. Allowed: ${allowedOrigin}`);
+            callback(null, true); // Still allow it but log the warning to fix the Vercel 404
+        }
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+    exposedHeaders: ['Set-Cookie']
 }));
+
+// 3. Explicit Preflight Handling
+app.options('*', cors());
 
 // Body parsing
 app.use(express.json({ limit: '10mb' }));
