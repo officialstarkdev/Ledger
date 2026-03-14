@@ -89,16 +89,22 @@ if (process.env.VERCEL !== '1') {
 // Error handler
 app.use(errorHandler);
 
-// Start server
+// ==========================================
+// UPDATED SERVER & DATABASE STARTUP LOGIC
+// ==========================================
+
 const PORT = process.env.PORT || 5000;
 
-if (process.env.NODE_ENV !== 'production' || process.env.VERCEL !== '1') {
-    connectDB().then(() => {
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-            console.log(`App available at http://localhost:${PORT}`);
-        });
+// 1. Unconditionally connect to the database so Vercel serverless functions can reach MongoDB
+connectDB();
+
+// 2. Only run the listener if you are running locally
+if (process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1') {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+        console.log(`App available at http://localhost:${PORT}`);
     });
 }
 
+// 3. Export the app for Vercel's serverless environment
 export default app;
