@@ -64,6 +64,15 @@ app.use(cookieParser());
 
 // Audit logging
 app.use(auditLogger);
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next(); // DB is ready, proceed to the route!
+    } catch (error) {
+        console.error("Database connection failed:", error);
+        res.status(500).json({ error: "Database connection failed" });
+    }
+});
 
 // API Routes
 app.use('/api/auth', authRoutes);
@@ -89,16 +98,9 @@ if (process.env.VERCEL !== '1') {
 // Error handler
 app.use(errorHandler);
 
-// ==========================================
-// UPDATED SERVER & DATABASE STARTUP LOGIC
-// ==========================================
-
 const PORT = process.env.PORT || 5000;
 
-// 1. Unconditionally connect to the database so Vercel serverless functions can reach MongoDB
-connectDB();
-
-// 2. Only run the listener if you are running locally
+// Only run the listener if you are running locally
 if (process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1') {
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
@@ -106,5 +108,4 @@ if (process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1') {
     });
 }
 
-// 3. Export the app for Vercel's serverless environment
 export default app;

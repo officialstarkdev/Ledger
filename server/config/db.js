@@ -30,7 +30,7 @@ async function connectDB() {
     const opts = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      bufferCommands: false, // Turn off buffering for serverless performance
+      // bufferCommands: false, // Turn off buffering for serverless performance
       maxPoolSize: 10,       // Keep pool size small in serverless environment
     };
 
