@@ -19,6 +19,9 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Trust Vercel's proxy - required for express-rate-limit
+app.set('trust proxy', 1);
+
 // 1. Security Headers
 app.use(helmet({
     contentSecurityPolicy: false,
