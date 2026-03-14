@@ -72,14 +72,16 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Serve React production build
-const distPath = path.join(__dirname, '..', 'web', 'dist');
-app.use(express.static(distPath));
+// Serve React production build - ONLY outside Vercel
+if (process.env.VERCEL !== '1') {
+    const distPath = path.join(__dirname, '..', 'web', 'dist');
+    app.use(express.static(distPath));
 
-// SPA catch-all — send index.html for any non-API route
-app.get('*', (req, res) => {
-    res.sendFile(path.join(distPath, 'index.html'));
-});
+    // SPA catch-all — send index.html for any non-API route
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(distPath, 'index.html'));
+    });
+}
 
 // Error handler
 app.use(errorHandler);
