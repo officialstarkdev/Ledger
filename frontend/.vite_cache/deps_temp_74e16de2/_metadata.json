@@ -1,0 +1,112 @@
+{
+  "hash": "e4e67633",
+  "configHash": "f80b0644",
+  "lockfileHash": "08e826b8",
+  "browserHash": "812a05dd",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "350297bb",
+      "needsInterop": true
+    },
+    "react-dom": {
+      "src": "../../node_modules/react-dom/index.js",
+      "file": "react-dom.js",
+      "fileHash": "135cb4fa",
+      "needsInterop": true
+    },
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "9ef4e71d",
+      "needsInterop": true
+    },
+    "react/jsx-runtime": {
+      "src": "../../node_modules/react/jsx-runtime.js",
+      "file": "react_jsx-runtime.js",
+      "fileHash": "a1044272",
+      "needsInterop": true
+    },
+    "axios": {
+      "src": "../../node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "0506b85f",
+      "needsInterop": false
+    },
+    "framer-motion": {
+      "src": "../../node_modules/framer-motion/dist/es/index.mjs",
+      "file": "framer-motion.js",
+      "fileHash": "9b2b8c2c",
+      "needsInterop": false
+    },
+    "jspdf": {
+      "src": "../../node_modules/jspdf/dist/jspdf.es.min.js",
+      "file": "jspdf.js",
+      "fileHash": "d5d0e560",
+      "needsInterop": false
+    },
+    "jspdf-autotable": {
+      "src": "../../node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.mjs",
+      "file": "jspdf-autotable.js",
+      "fileHash": "2c44418a",
+      "needsInterop": false
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "d86359da",
+      "needsInterop": true
+    },
+    "react-hot-toast": {
+      "src": "../../node_modules/react-hot-toast/dist/index.mjs",
+      "file": "react-hot-toast.js",
+      "fileHash": "805973d1",
+      "needsInterop": false
+    },
+    "react-icons/hi2": {
+      "src": "../../node_modules/react-icons/hi2/index.mjs",
+      "file": "react-icons_hi2.js",
+      "fileHash": "e8a6b0af",
+      "needsInterop": false
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.mjs",
+      "file": "react-router-dom.js",
+      "fileHash": "185e607c",
+      "needsInterop": false
+    },
+    "recharts": {
+      "src": "../../node_modules/recharts/es6/index.js",
+      "file": "recharts.js",
+      "fileHash": "8a6365fb",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "html2canvas.esm-I5DRZKSF": {
+      "file": "html2canvas__esm-I5DRZKSF.js"
+    },
+    "purify.es-HAJWJRF7": {
+      "file": "purify__es-HAJWJRF7.js"
+    },
+    "index.es-AE3NYV5C": {
+      "file": "index__es-AE3NYV5C.js"
+    },
+    "chunk-SITVF2AJ": {
+      "file": "chunk-SITVF2AJ.js"
+    },
+    "chunk-JBIJKIOV": {
+      "file": "chunk-JBIJKIOV.js"
+    },
+    "chunk-SZZZMFBH": {
+      "file": "chunk-SZZZMFBH.js"
+    },
+    "chunk-VX2H6PUQ": {
+      "file": "chunk-VX2H6PUQ.js"
+    },
+    "chunk-G3PMV62Z": {
+      "file": "chunk-G3PMV62Z.js"
+    }
+  }
+}
