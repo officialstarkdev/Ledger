@@ -14,6 +14,16 @@ import auditLogger from './middleware/auditMiddleware.js';
 
 dotenv.config();
 
+// Verify critical environment variables
+const requiredEnvs = ['MONGO_URI', 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'CLIENT_URL'];
+requiredEnvs.forEach(env => {
+    if (!process.env[env]) {
+        console.error(`CRITICAL: Environment variable ${env} is missing!`);
+    } else {
+        console.log(`ENV CHECK: ${env} is set`);
+    }
+});
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
