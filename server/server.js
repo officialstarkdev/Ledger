@@ -68,3 +68,5 @@ connectDB().then(() => {
         console.log(`App available at http://localhost:${PORT}`);
     });
 });
+
+export default app;
