@@ -95,18 +95,25 @@ export const logout = (req, res) => {
 export const refreshToken = async (req, res, next) => {
     try {
         const token = req.cookies.refreshToken;
+        console.log(`Refresh Attempt - Token Present: ${!!token}`);
+
         if (!token) {
+            console.warn('Refresh Attempt Failed: No Token');
             res.status(401);
             throw new Error('No refresh token');
         }
 
         const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+        console.log(`Refresh - Token Verified for ID: ${decoded.id}`);
+        
         const user = await User.findById(decoded.id);
         if (!user) {
+            console.error(`Refresh - User not found for ID: ${decoded.id}`);
             res.status(401);
             throw new Error('User not found');
         }
 
+        console.log(`Refresh Success - User: ${user.email}`);
         const accessToken = generateAccessToken(user._id);
         const newRefreshToken = generateRefreshToken(user._id);
         setCookies(res, accessToken, newRefreshToken);
