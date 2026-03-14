@@ -16,6 +16,8 @@ const setCookies = (res, accessToken, refreshToken) => {
         sameSite: 'none', // Required for cross-domain cookies
     };
 
+    console.log(`Setting Cookies - Secure: ${cookieOptions.secure}, SameSite: ${cookieOptions.sameSite}`);
+
     res.cookie('accessToken', accessToken, {
         ...cookieOptions,
         maxAge: 15 * 60 * 1000,
@@ -60,13 +62,23 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
+        console.log(`Login Attempt - Email: ${email}, Host: ${req.headers.host}`);
 
         const user = await User.findOne({ email }).select('+password');
-        if (!user || !(await user.matchPassword(password))) {
+        if (!user) {
+            console.warn(`Login Failed - User not found: ${email}`);
             res.status(401);
             throw new Error('Invalid email or password');
         }
 
+        const isMatch = await user.matchPassword(password);
+        if (!isMatch) {
+            console.warn(`Login Failed - Password mismatch: ${email}`);
+            res.status(401);
+            throw new Error('Invalid email or password');
+        }
+
+        console.log(`Login Success - User Found: ${user.email}`);
         const accessToken = generateAccessToken(user._id);
         const refreshToken = generateRefreshToken(user._id);
         setCookies(res, accessToken, refreshToken);
@@ -80,6 +92,7 @@ export const login = async (req, res, next) => {
             createdAt: user.createdAt,
         });
     } catch (error) {
+        console.error(`Login Error: ${error.message}`);
         next(error);
     }
 };
