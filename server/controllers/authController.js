@@ -10,16 +10,18 @@ const generateRefreshToken = (id) => {
 };
 
 const setCookies = (res, accessToken, refreshToken) => {
-    res.cookie('accessToken', accessToken, {
+    const cookieOptions = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: true, // Always true for cross-domain/Vercel
+        sameSite: 'none', // Required for cross-domain cookies
+    };
+
+    res.cookie('accessToken', accessToken, {
+        ...cookieOptions,
         maxAge: 15 * 60 * 1000,
     });
     res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        ...cookieOptions,
         maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 };
@@ -84,41 +86,15 @@ export const login = async (req, res, next) => {
 
 // POST /api/auth/logout
 export const logout = (req, res) => {
-    res.cookie('accessToken', '', { httpOnly: true, expires: new Date(0) });
-    res.cookie('refreshToken', '', { httpOnly: true, expires: new Date(0) });
+    res.cookie('accessToken', '', { httpOnly: true, secure: true, sameSite: 'none', expires: new Date(0) });
+    res.cookie('refreshToken', '', { httpOnly: true, secure: true, sameSite: 'none', expires: new Date(0) });
     res.json({ message: 'Logged out successfully' });
 };
 
-// POST /api/auth/refresh
-export const refreshToken = async (req, res, next) => {
-    try {
-        const token = req.cookies.refreshToken;
-        if (!token) {
-            res.status(401);
-            throw new Error('No refresh token');
-        }
-
-        const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
-        const user = await User.findById(decoded.id);
-        if (!user) {
-            res.status(401);
-            throw new Error('User not found');
-        }
-
-        const accessToken = generateAccessToken(user._id);
-        const newRefreshToken = generateRefreshToken(user._id);
-        setCookies(res, accessToken, newRefreshToken);
-
-        res.json({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            avatar: user.avatar,
-            role: user.role,
-        });
+// ... (skipping to line 120 in the actual file for the catch block)
     } catch (error) {
-        res.cookie('accessToken', '', { httpOnly: true, expires: new Date(0) });
-        res.cookie('refreshToken', '', { httpOnly: true, expires: new Date(0) });
+        res.cookie('accessToken', '', { httpOnly: true, secure: true, sameSite: 'none', expires: new Date(0) });
+        res.cookie('refreshToken', '', { httpOnly: true, secure: true, sameSite: 'none', expires: new Date(0) });
         res.status(401);
         next(new Error('Invalid refresh token'));
     }
